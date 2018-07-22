@@ -20,16 +20,12 @@ def minimum_curvature_calc(
 
     # Set variables for the inclination and azimuth of the first two survey points
     inclination_1 = math.radians(dip_survey_station_1)
-    azimuth_1 = math.radians(azimuth_survey_station_1)
+    azimuth_1 = math.radians(azimuth_survey_station_1 - convergence)
 
     # Set variables for the inclination and azimuth of the second two survey points
     inclination_2 = math.radians(dip_survey_station_2)
-    azimuth_2 = math.radians(azimuth_survey_station_2)
+    azimuth_2 = math.radians(azimuth_survey_station_2 - convergence)
 
-    azimuth_1_convergence = math.radians(azimuth_survey_station_1 -
-                                         convergence)
-    azimuth_2_convergence = math.radians(azimuth_survey_station_2 -
-                                         convergence)
 
     # Calculate the DogLeg
     dogleg = np.arccos(
@@ -57,13 +53,13 @@ def minimum_curvature_calc(
 
     # Calculation for northing difference between first and second survey stations
     northing_difference = 0.5 * distance_between_stations * (
-        np.sin(inclination_1) * np.cos(azimuth_1_convergence) +
-        np.sin(inclination_2) * np.cos(azimuth_2_convergence)) * ratio_factor
+        np.sin(inclination_1) * np.cos(azimuth_1) +
+        np.sin(inclination_2) * np.cos(azimuth_2)) * ratio_factor
 
     # Calculation for easting difference between first and second survey stations
     easting_difference = 0.5 * distance_between_stations * (
-        np.sin(inclination_1) * np.sin(azimuth_1_convergence) +
-        np.sin(inclination_2) * np.sin(azimuth_2_convergence)) * ratio_factor
+        np.sin(inclination_1) * np.sin(azimuth_1) +
+        np.sin(inclination_2) * np.sin(azimuth_2)) * ratio_factor
 
     return tvd_difference, northing_difference, easting_difference, dogleg_severity
 
